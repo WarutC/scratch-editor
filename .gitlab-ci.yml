@@ -1,0 +1,73 @@
+# Sparky Scratch Editor — GitLab CI (Story 7.4)
+#
+# Scope (7.4): test + build only. The current UAT deploy still runs on
+# GitHub Actions (`.github/workflows/deploy-uat.yml`); that workflow stays
+# alive until **Story 10.3** migrates the image build/push to the GitLab
+# Container Registry and wires ArgoCD. Story 7.5 keeps the GH-Actions
+# workflow working during the transition window (Node24 action-SHA bump,
+# deadline 2026-06-02). DO NOT remove or modify `.github/workflows/*` here.
+#
+# Cross-references:
+#   - Story 7.4 (this file)     — test/build CI on GitLab
+#   - Story 7.5                 — keep GH-Actions deploy alive (Node24)
+#   - Story 10.3                — image build/push to GitLab Container
+#                                 Registry + ArgoCD + retire deploy-uat.yml
+#
+# Per-workspace `lint` scripts exist on a subset of workspaces
+# (task-herder, scratch-render, scratch-vm, scratch-media-lib-scripts);
+# `--if-present` makes the run a no-op on workspaces without one. There is
+# NO top-level lint script today; adding one is out of scope for 7.4.
+
+stages:
+  - test
+  - build
+
+variables:
+  # Node 24 to match the editor's .nvmrc (24.15.0) and the Node24 bump
+  # tracked by Story 7.5 for the parallel GH-Actions deploy workflow.
+  NODE_IMAGE: 'node:24'
+
+# Workspace install is heavy — cache node_modules on ref + lockfile.
+.node_cache: &node_cache
+  key:
+    files:
+      - package-lock.json
+    prefix: '$CI_COMMIT_REF_SLUG'
+  paths:
+    - node_modules/
+    - packages/*/node_modules/
+
+test:
+  stage: test
+  image: $NODE_IMAGE
+  cache:
+    <<: *node_cache
+  before_script:
+    - npm ci
+  script:
+    # Per-workspace lint (no-op on workspaces without a `lint` script).
+    - npm run lint --workspaces --if-present
+    - npm test --workspaces
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+build:
+  stage: build
+  image: $NODE_IMAGE
+  needs:
+    - test
+  cache:
+    <<: *node_cache
+    policy: pull
+  before_script:
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - packages/scratch-gui/build/
+    expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
