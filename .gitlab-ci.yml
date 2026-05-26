@@ -26,16 +26,19 @@ variables:
   # Node 24 to match the editor's .nvmrc (24.15.0) and the Node24 bump
   # tracked by Story 7.5 for the parallel GH-Actions deploy workflow.
   NODE_IMAGE: 'node:24'
+  # Cache npm's download cache (not node_modules). `npm ci` always wipes and
+  # re-creates node_modules, so caching node_modules is wasted I/O and can
+  # leak state across MRs on the same branch. Caching `~/.npm` is the supported
+  # idiom and gives most of the install speedup.
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
 
-# Workspace install is heavy — cache node_modules on ref + lockfile.
 .node_cache: &node_cache
   key:
     files:
       - package-lock.json
     prefix: '$CI_COMMIT_REF_SLUG'
   paths:
-    - node_modules/
-    - packages/*/node_modules/
+    - .npm/
 
 test:
   stage: test
@@ -43,11 +46,14 @@ test:
   cache:
     <<: *node_cache
   before_script:
-    - npm ci
+    - npm ci --prefer-offline
   script:
     # Per-workspace lint (no-op on workspaces without a `lint` script).
     - npm run lint --workspaces --if-present
-    - npm test --workspaces
+    # `--if-present` so workspaces without a `test` script (asset / tooling
+    # packages) don't break the pipeline. Lint already uses --if-present above;
+    # parity here was missing on the initial commit (Story 7.4 code review).
+    - npm test --workspaces --if-present
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH
@@ -61,7 +67,7 @@ build:
     <<: *node_cache
     policy: pull
   before_script:
-    - npm ci
+    - npm ci --prefer-offline
   script:
     - npm run build
   artifacts:
