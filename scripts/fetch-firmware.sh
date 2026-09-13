@@ -8,7 +8,7 @@
 set -euo pipefail
 
 : "${GITLAB_API_BASE:?}"; : "${GITLAB_FW_PROJECT_ID:?}"; : "${GITLAB_FW_READ_TOKEN:?}"
-PUBLIC_BASE="${PUBLIC_FW_BASE:-https://sparky-uat.warut.me/firmware}"
+PUBLIC_BASE="${PUBLIC_FW_BASE:-https://sparky.ntpsemi.com/firmware}"  # 2026-09-14: sparky-uat.warut.me no longer resolves; the delivery host is sparky.ntpsemi.com
 OUT=firmware
 H=(-H "PRIVATE-TOKEN: ${GITLAB_FW_READ_TOKEN}")
 API="${GITLAB_API_BASE}/projects/${GITLAB_FW_PROJECT_ID}"
