@@ -1,4 +1,7 @@
 // @ts-check
+// The core `arrow-parens` warning (always) contradicts the enforced @stylistic/arrow-parens (as-needed);
+// `eslint --fix` loops between them, so the warning is silenced here and the error-level rule governs.
+/* eslint-disable arrow-parens */
 const {test, expect} = require('@playwright/test');
 
 // Walk up from a node to the first ancestor with a painted background; returns "rgb(r, g, b)".
@@ -35,7 +38,7 @@ test('menu bar is Sparky blue', async ({page}) => {
 test('Share button is Sparky yellow with a navy label (when the editor offers Share)', async ({page}) => {
     await openEditor(page);
     const share = page.getByText('Share', {exact: true}).first();
-    test.skip(await share.count() === 0, 'this build of the editor does not render Share');
+    await expect(share).toBeVisible();
     expect(await bgOf(share)).toBe('rgb(254, 206, 5)');
     expect(await share.evaluate(el => getComputedStyle(el).color)).toBe('rgb(0, 44, 105)');
 });
