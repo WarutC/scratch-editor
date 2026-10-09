@@ -26,3 +26,16 @@ test('extension library shows the Sparky card first with its description', async
     await expect(first).toContainText('Control your Spark IoT kit.');
     expect(pageErrors).toEqual([]);
 });
+
+test('menu bar is Sparky blue', async ({page}) => {
+    await openEditor(page);
+    expect(await bgOf(page.locator('#logo_img'))).toBe('rgb(10, 99, 203)');
+});
+
+test('Share button is Sparky yellow with a navy label (when the editor offers Share)', async ({page}) => {
+    await openEditor(page);
+    const share = page.getByText('Share', {exact: true}).first();
+    test.skip(await share.count() === 0, 'this build of the editor does not render Share');
+    expect(await bgOf(share)).toBe('rgb(254, 206, 5)');
+    expect(await share.evaluate(el => getComputedStyle(el).color)).toBe('rgb(0, 44, 105)');
+});

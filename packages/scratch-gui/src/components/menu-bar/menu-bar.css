@@ -1,4 +1,5 @@
 @import "../../css/colors.css";
+@import "../../css/sparky-tokens.css";
 @import "../../css/units.css";
 @import "../../css/z-index.css";
 
@@ -27,7 +28,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: $menu-bar-standard-font-size;
     font-weight: bold;
-    background-color: $looks-secondary;
+    background-color: $sparky-blue;
     color: $ui-white;
 }
 
@@ -105,7 +106,7 @@
 }
 
 .feedback-link {
-    color: $looks-secondary;
+    color: $sparky-blue;
     text-decoration: none;
 }
 

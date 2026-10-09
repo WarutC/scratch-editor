@@ -1,7 +1,9 @@
 @import "../../css/colors.css";
+@import "../../css/sparky-tokens.css";
 
 .share-button {
-    background: $data-primary;
+    background: $sparky-yellow;
+    color: $sparky-navy;
 }
 
 .share-button-is-shared {
