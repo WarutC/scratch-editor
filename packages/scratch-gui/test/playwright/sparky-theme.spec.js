@@ -2,6 +2,8 @@
 // The core `arrow-parens` warning (always) contradicts the enforced @stylistic/arrow-parens (as-needed);
 // `eslint --fix` loops between them, so the warning is silenced here and the error-level rule governs.
 /* eslint-disable arrow-parens */
+const fs = require('fs');
+const {fileURLToPath} = require('url');
 const {test, expect} = require('@playwright/test');
 
 // Walk up from a node to the first ancestor with a painted background; returns "rgb(r, g, b)".
@@ -78,4 +80,24 @@ test('menu bar shows the Sparky logo at the Figma height', async ({page}) => {
 test('page title is Sparky', async ({page}) => {
     await page.goto('index.html');
     await expect(page).toHaveTitle('Sparky');
+});
+
+test('connection modal uses Sparky blue for actions and the bee as its icon', async ({page}) => {
+    await openEditor(page);
+    await page.locator('[class*="extension-button-container"] button').click();
+    await page.locator('[class*="library-item_library-item"]').first()
+        .click();
+    const start = page.getByRole('button', {name: 'Start Searching'});
+    await expect(start).toBeVisible();
+    expect(await bgOf(start)).toBe('rgb(10, 99, 203)');
+    const icon = page.locator('[class*="modal_header-image"]').first();
+    await expect(icon).toBeVisible();
+    // Large SVGs are emitted as files; the build is served from file://, which fetch() cannot read.
+    const src = await icon.evaluate(img => img.src);
+    const svg = (src.startsWith('file:') ?
+        fs.readFileSync(fileURLToPath(src), 'utf8') :
+        await icon.evaluate(img => fetch(img.src).then(r => r.text()))).toLowerCase();
+    expect(svg).toContain('#ffffff'); // white tile
+    expect(svg).not.toContain('#ff6b35'); // the old orange lightning-bolt fill of spark-small.svg
+    expect(svg).toContain('#fbd806'); // the bee's yellow (gradient stop)
 });

@@ -1,5 +1,6 @@
 @import "../../css/colors.css";
 @import "../../css/units.css";
+@import "../../css/sparky-tokens.css";
 
 .modal-content {
     width: 480px;
@@ -81,8 +82,8 @@
     border-radius: 0.25rem;
     font-weight: 600;
     font-size: 0.85rem;
-    background: $looks-secondary;
-    border: $looks-secondary;
+    background: $sparky-blue;
+    border: $sparky-blue;
     color: white;
     cursor: pointer;
 }
@@ -173,9 +174,9 @@
     right: -15px;
     left: -15px;
     padding: 5px 5px;
-    background-color: $looks-secondary;
+    background-color: $sparky-blue;
     border-radius: 100%;
-    box-shadow: 0px 0px 0px 4px $looks-transparent;
+    box-shadow: 0px 0px 0px 4px $sparky-blue-transparent;
     /* animation: pulse-blue-ring 1s infinite ease-in-out alternate; */
     animation: wiggle 0.5s infinite ease-in-out alternate;
 
@@ -183,7 +184,7 @@
 
 @keyframes pulse-blue-ring {
     100% {
-        box-shadow: 0px 0px 0px 8px $looks-light-transparent;
+        box-shadow: 0px 0px 0px 8px $sparky-blue-light-transparent;
     }
 }
 
@@ -209,9 +210,9 @@
 .bluetooth-centered-icon {
     position: absolute;
     padding: 5px 5px;
-    background-color: $looks-secondary;
+    background-color: $sparky-blue;
     border-radius: 100%;
-    box-shadow: 0px 0px 0px 2px $looks-transparent;
+    box-shadow: 0px 0px 0px 2px $sparky-blue-transparent;
 }
 
 .peripheral-tile-widgets {
@@ -221,7 +222,7 @@
 
 .activityArea {
     height: 165px;
-    background-color: $looks-light-transparent;
+    background-color: $sparky-blue-light-transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -302,7 +303,7 @@
 .connection-button {
     padding: 0.6rem 0.75rem;
     border-radius: 0.5rem;
-    background: $looks-secondary;
+    background: $sparky-blue;
     color: white;
     font-weight: 600;
     font-size: 0.85rem;
@@ -314,7 +315,7 @@
 }
 
 .connection-button:disabled {
-    background: $looks-transparent;
+    background: $sparky-blue-transparent;
 }
 
 .segmented-button {
@@ -395,7 +396,7 @@
     display: flex;
     padding: 0.25rem 0.1rem;
     border-radius: 1rem;
-    background: $looks-light-transparent;
+    background: $sparky-blue-light-transparent;
 }
 
 .dots-holder-success {
@@ -414,11 +415,11 @@
 }
 
 .inactive-step-dot {
-    background: $looks-transparent;
+    background: $sparky-blue-transparent;
 }
 
 .active-step-dot {
-    background: $looks-secondary;
+    background: $sparky-blue;
 }
 
 .success-dot {
