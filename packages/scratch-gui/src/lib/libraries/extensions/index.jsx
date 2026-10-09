@@ -455,11 +455,5 @@ export default [
             />
         ),
         helpLink: 'https://scratch.mit.edu/wedo'
-    },
-    {
-        name: 'Demo',
-        extensionId: 'demo',
-        description: 'Demo extension with example blocks.',
-        featured: true
     }
 ];
