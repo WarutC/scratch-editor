@@ -8,7 +8,12 @@
 }
 
 .header {
-    background-color: $pen-tertiary;
+    background-color: $sparky-blue;
+}
+
+/* The close button's class lives in another CSS module, so match it by its generated class name. */
+.header [class*="close-button_close-button"] {
+    background-color: $sparky-blue-dark;
 }
 
 .body {
@@ -162,6 +167,25 @@
 .peripheral-activity-icon {
     /* width: 80px;
     height: 80px; */
+}
+
+/*
+    The Sparky hero banner (spark-banner.png, 632x393) is a full-width illustration, unlike the small
+    device icons other extensions use. Scoped by file name so those keep their stock sizing; the banner is
+    emitted as a hashed file (spark-banner.<hash>.png), so the name substring is stable.
+    The modal is 480px wide with a 4px border each side, so the banner is 472px wide: edge to edge, at its own
+    aspect ratio.
+*/
+.activityArea:has(img[src*="spark-banner"]) {
+    height: auto;
+    padding: 0;
+}
+
+.radar-big[src*="spark-banner"],
+.peripheral-activity-icon[src*="spark-banner"] {
+    display: block;
+    width: 472px;
+    height: auto;
 }
 
 .connection-tip-icon {

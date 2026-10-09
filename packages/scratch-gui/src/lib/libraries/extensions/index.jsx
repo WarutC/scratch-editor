@@ -51,7 +51,6 @@ import faceSensingInsetIconURL from './faceSensing/faceSensing-small.svg';
 
 import sparkIconURL from './spark/spark-banner.png';
 import sparkInsetIconURL from './spark/spark-badge.svg';
-import sparkConnectionIconURL from './spark/spark-illustration.svg';
 import sparkConnectionSmallIconURL from './spark/spark-modal-icon.svg';
 
 export default [
@@ -77,7 +76,7 @@ export default [
         disabled: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: true,
-        connectionIconURL: sparkConnectionIconURL,
+        connectionIconURL: sparkIconURL,
         connectionSmallIconURL: sparkConnectionSmallIconURL,
         prescanMessage: (
             <FormattedMessage

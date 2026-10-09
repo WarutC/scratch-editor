@@ -101,3 +101,35 @@ test('connection modal uses Sparky blue for actions and the bee as its icon', as
     expect(svg).not.toContain('#ff6b35'); // the old orange lightning-bolt fill of spark-small.svg
     expect(svg).toContain('#fbd806'); // the bee's yellow (gradient stop)
 });
+
+test('connection modal has a Sparky blue header, a dark blue close button and the hero banner', async ({page}) => {
+    await openEditor(page);
+    await page.locator('[class*="extension-button-container"] button').click();
+    await page.locator('[class*="library-item_library-item"]').first()
+        .click();
+    await expect(page.getByRole('button', {name: 'Start Searching'})).toBeVisible();
+
+    const header = page.locator('[class*="modal_header"]').first();
+    expect(await bgOf(header)).toBe('rgb(10, 99, 203)');
+    const close = header.locator('[class*="close-button_close-button"]');
+    expect(await bgOf(close)).toBe('rgb(7, 74, 156)');
+
+    // The illustration is the Sparky hero banner (632x393), shown undistorted.
+    const banner = page.locator('[class*="connection-modal_radar-big"]').first();
+    await expect(banner).toBeVisible();
+    expect(await banner.evaluate(img => img.src)).toContain('spark-banner');
+    const natural = await banner.evaluate(img => ({w: img.naturalWidth, h: img.naturalHeight}));
+    expect(natural.w / natural.h).toBeCloseTo(632 / 393, 2);
+    const box = await banner.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box.width).toBeGreaterThan(300); // readable, not the old 120 px icon slot
+    expect(box.width / box.height).toBeCloseTo(632 / 393, 1);
+
+    // Other modals keep their own header colour.
+    await page.getByRole('button', {name: 'Start Searching'}).click();
+    await page.locator('[class*="close-button_close-button"]').first()
+        .click();
+    await page.locator('[class*="extension-button-container"] button').click();
+    const libHeader = page.locator('[class*="modal_header"]').first();
+    expect(await bgOf(libHeader)).not.toBe('rgb(10, 99, 203)');
+});
