@@ -71,3 +71,8 @@ test('menu bar shows the Sparky logo at the Figma height', async ({page}) => {
     expect(Math.round(box.height)).toBe(34); // Figma logo_sparky is 116 x 34
     expect(box.width / box.height).toBeCloseTo(116 / 34, 1);
 });
+
+test('page title is Sparky', async ({page}) => {
+    await page.goto('index.html');
+    await expect(page).toHaveTitle('Sparky');
+});
