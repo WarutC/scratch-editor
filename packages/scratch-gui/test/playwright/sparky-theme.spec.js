@@ -77,9 +77,9 @@ test('menu bar shows the Sparky logo at the Figma height', async ({page}) => {
     expect(box.width / box.height).toBeCloseTo(116 / 34, 1);
 });
 
-test('page title is Sparky', async ({page}) => {
+test('page title is SPARKY x Scratch', async ({page}) => {
     await page.goto('index.html');
-    await expect(page).toHaveTitle('Sparky');
+    await expect(page).toHaveTitle('SPARKY x Scratch');
 });
 
 test('connection modal uses Sparky blue for actions and the bee as its icon', async ({page}) => {
