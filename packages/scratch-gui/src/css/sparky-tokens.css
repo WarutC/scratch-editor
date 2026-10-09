@@ -1,5 +1,7 @@
 /* packages/scratch-gui/src/css/sparky-tokens.css
-   Sparky brand values (Figma SPARKY-UI, page "SPARKY - Scratch"). Do not edit colors.css; add tokens here. */
+   Sparky brand values (Figma SPARKY-UI, page "SPARKY - Scratch"). colors.css imports this file and maps the four
+   Scratch purple variables ($looks-secondary and its transparent, light-transparent and dark variants) onto these
+   tokens; add new brand values here. */
 $sparky-blue: #0A63CB;
 $sparky-navy: #002C69;
 $sparky-yellow: #FECE05;

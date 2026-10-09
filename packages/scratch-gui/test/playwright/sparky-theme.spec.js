@@ -135,7 +135,6 @@ test('connection modal has a Sparky blue header, a dark blue close button and th
 });
 
 const SPARKY_BLUE = 'rgb(10, 99, 203)';
-const OLD_PURPLE = 'rgb(133, 92, 214)';
 
 // Large SVGs are emitted as files; the build is served from file://, which fetch() cannot read.
 const svgOf = async img => {
@@ -175,10 +174,9 @@ test('selected stage-size and Show toggles are tinted Sparky blue, not Scratch p
     const showToggle = page.locator('[class*="toggle-buttons_button"][aria-pressed="true"][aria-label="Show sprite"]');
     await expect(stageToggle).toBeVisible();
     await expect(showToggle).toBeVisible();
-    expect(await selected.count()).toBeGreaterThanOrEqual(2);
+    expect(await selected.count()).toBe(2);
     for (const toggle of [stageToggle, showToggle]) {
         const bg = await toggle.evaluate(el => getComputedStyle(el).backgroundColor);
-        expect(bg).not.toBe(OLD_PURPLE);
         expect(bg).toBe('rgba(10, 99, 203, 0.15)'); // Sparky blue at 15% over white = #DBE8F7
         const svg = await svgOf(toggle.locator('img'));
         expect(svg).toContain('#0a63cb');
