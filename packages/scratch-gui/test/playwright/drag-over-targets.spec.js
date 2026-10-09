@@ -78,16 +78,16 @@ test('sprite tile scales when a block is dragged over it', async ({page}) => {
     await page.goto('index.html');
 
     // The editing target's tile doesn't get .raised, so we need a
-    // second sprite. Duplicate Sprite1 by right-clicking it.
+    // second sprite. Duplicate Firefly by right-clicking it.
     const spriteTiles = page.locator('[role="button"][class*="sprite-selector-item"]');
-    const sprite1 = page.locator('text=Sprite1').first();
+    const sprite1 = page.getByText('Firefly', {exact: true}).first();
     await sprite1.click({button: 'right'});
     await page.getByText('duplicate', {exact: false}).click();
     await expect(spriteTiles).toHaveCount(2);
 
-    // Sprite2 is now selected (editing target). Sprite1's tile will
+    // Firefly2 is now selected (editing target). Firefly's tile will
     // get .raised during a block drag from Sprite2's workspace.
-    const sprite1Tile = spriteTiles.filter({has: page.locator('text=Sprite1')}).first();
+    const sprite1Tile = spriteTiles.filter({has: page.getByText('Firefly', {exact: true})}).first();
     await expect(sprite1Tile).toBeVisible();
 
     await startBlockDrag(page);

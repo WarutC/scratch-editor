@@ -83,7 +83,7 @@ describe('Menu bar settings', () => {
         await loadUri(uri);
 
         // Change the project by deleting a sprite
-        await rightClickText('Sprite1', scope.spriteTile);
+        await rightClickText('Firefly', scope.spriteTile);
         await clickText('delete', scope.contextMenu);
         await clickText('yes', scope.modal);
 

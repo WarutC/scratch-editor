@@ -67,7 +67,7 @@ describe('Working with sprites', () => {
     test('Deleting only sprite does not crash with changed name', async () => {
         await loadUri(uri);
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for scroll animation
-        await rightClickText('Sprite1', scope.spriteTile);
+        await rightClickText('Firefly', scope.spriteTile);
         await clickText('delete', scope.contextMenu);
         await clickText('yes', scope.modal);
         // Confirm that the stage has been switched to

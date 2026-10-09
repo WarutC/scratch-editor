@@ -31,7 +31,7 @@ describe('Loading scratch gui', () => {
 
 
         // Delete it
-        await rightClickText('Sprite1', scope.spriteTile);
+        await rightClickText('Firefly', scope.spriteTile);
         
         await clickText('delete', scope.contextMenu);
         await clickText('yes', scope.modal);
