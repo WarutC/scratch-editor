@@ -4,6 +4,7 @@ const formatMessage = require('format-message');
 const log = require('../../util/log');
 
 const translations = require('./translations');
+const SPARKY_ICON_URI = require('./icon.js');
 
 // Merge this extension's block-label translations into format-message's current
 // table, preserving every other locale/key already registered.
@@ -579,6 +580,12 @@ class Scratch3SparkBlocks {
         return {
             id: EXTENSION_ID,
             name: formatMessage({id: 'spark.categoryName', default: 'Sparky', description: 'Extension name'}),
+            // Sparky palette (Figma block colour #0A63CB; secondary/tertiary are derived shades).
+            color1: '#0A63CB',
+            color2: '#0957B6',
+            color3: '#074A9C',
+            blockIconURI: SPARKY_ICON_URI,
+            menuIconURI: SPARKY_ICON_URI,
             showStatusButton: true,
             blocks: [
                 // ══ OUTPUTS ══════════════════════════════════════════
