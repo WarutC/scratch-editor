@@ -3,6 +3,7 @@
 // `eslint --fix` loops between them, so the warning is silenced here and the error-level rule governs.
 /* eslint-disable arrow-parens */
 const fs = require('fs');
+const path = require('path');
 const {fileURLToPath} = require('url');
 const {test, expect} = require('@playwright/test');
 
@@ -264,6 +265,44 @@ test('a new project has the Firefly sprite with 12 costumes, drawn on the stage'
         await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     }
     expect(failed).toEqual([]);
+    expect(pageErrors).toEqual([]);
+});
+
+// Firefly is also in the Choose a Sprite catalogue. Scratch's asset hosts do not have its files, so they are served
+// from the editor's own static folder; with every scratch.mit.edu host blocked it must still show and add real art.
+test('Choose a Sprite lists Firefly and adds it with its 12 real costumes, without Scratch hosts', async ({page}) => {
+    const scratchRequests = [];
+    await page.route(/scratch\.mit\.edu/, route => {
+        scratchRequests.push(route.request().url());
+        return route.abort();
+    });
+    const pageErrors = await openEditor(page);
+
+    await page.getByRole('button', {name: 'Choose a Sprite'}).first()
+        .click();
+    await page.getByPlaceholder('Search').fill('Firefly');
+    // the card and its inner name/image wrappers all match the class prefix; the outermost is first
+    const card = page.locator('[class*="library-item_library-item"]').filter({hasText: 'Firefly'})
+        .first();
+    await expect(card).toBeVisible();
+    const thumbnail = card.locator('img').first();
+    await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    await card.click();
+
+    // a second Firefly joins the default one; the new sprite is selected
+    await expect(page.locator('[class*="sprite-selector-item_is-selected"]').first()).toContainText('Firefly2');
+    await page.getByRole('tab', {name: 'Costumes'}).click();
+    const costumes = page.locator(
+        '[class*="asset-panel_wrapper"] [class*="sprite-selector-item_sprite-selector-item"]'
+    );
+    await expect(costumes).toHaveCount(12);
+    for (const tile of await costumes.locator('img').all()) {
+        await expect.poll(() => tile.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    }
+    // other library sprites do load from Scratch's CDN (blocked here); Firefly's own files must never be asked for
+    const fireflyFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'static', 'sparky-assets'));
+    expect(fireflyFiles).toHaveLength(12);
+    expect(scratchRequests.filter(url => fireflyFiles.some(file => url.includes(file)))).toEqual([]);
     expect(pageErrors).toEqual([]);
 });
 

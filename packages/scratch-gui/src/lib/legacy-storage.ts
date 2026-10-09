@@ -6,6 +6,7 @@ import {LegacyBackpackStorage} from './legacy-backpack-storage';
 import CloudProvider from './cloud-provider';
 
 import saveProjectToServer from '../lib/save-project-to-server';
+import {addSparkyWebStore} from './sparky-assets.js';
 
 export class LegacyStorage implements GUIStorage {
     private projectHost?: string;
@@ -40,6 +41,7 @@ export class LegacyStorage implements GUIStorage {
 
     constructor () {
         this.cacheDefaultProject(this.scratchStorage);
+        addSparkyWebStore(this.scratchStorage);
         this.addOfficialScratchWebStores(this.scratchStorage);
     }
 

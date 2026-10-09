@@ -6,6 +6,10 @@
  * src/lib/default-project/firefly/ under its Scratch asset name (<md5 of the bytes>.<ext>), and regenerates
  * src/lib/default-project/firefly/firefly-costumes.ts, which project-data.ts and index.ts consume.
  *
+ * It also publishes the same sprite to the Choose a Sprite library: the files go to static/sparky-assets/ (served
+ * by the editor's own origin, see src/lib/sparky-assets.js) and the library entry to
+ * src/lib/libraries/sparky-sprites.json (passed to the GUI as dynamicAssets, so sprites.json stays upstream's).
+ *
  * PNG and SVG are both supported. To swap the art, drop the new files into the source folder (keeping the
  * manifest's file names, or edit the manifest) and re-run:
  *
@@ -26,6 +30,9 @@ const path = require('path');
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
 const OUT_DIR = path.join(PACKAGE_ROOT, 'src', 'lib', 'default-project', 'firefly');
 const OUT_MODULE = path.join(OUT_DIR, 'firefly-costumes.ts');
+const STATIC_DIR = path.join(PACKAGE_ROOT, 'static', 'sparky-assets');
+const OUT_LIBRARY = path.join(PACKAGE_ROOT, 'src', 'lib', 'libraries', 'sparky-sprites.json');
+const LIBRARY_TAGS = ['animals', 'fantasy', 'sparky', 'firefly'];
 const DEFAULT_MANIFEST = path.join(__dirname, 'firefly-manifest.json');
 const DEFAULT_SRC = path.resolve(PACKAGE_ROOT, '../../..', 'documents', 'Sparky-scratch-redesign', 'prototype',
     'assets', 'costumes');
@@ -189,6 +196,39 @@ const renderModule = costumes => {
 };
 
 /**
+ * @param {object[]} costumes described costumes, in manifest order
+ * @returns {string} the sprite library entry (JSON array) for the Choose a Sprite catalogue
+ */
+const renderLibrary = costumes => JSON.stringify([{
+    name: 'Firefly',
+    tags: LIBRARY_TAGS,
+    isStage: false,
+    costumes: costumes.map(c => ({
+        name: c.name,
+        assetId: c.assetId,
+        md5ext: c.md5ext,
+        dataFormat: c.ext,
+        bitmapResolution: c.bitmapResolution,
+        rotationCenterX: c.rotationCenterX,
+        rotationCenterY: c.rotationCenterY,
+        tags: LIBRARY_TAGS,
+        // library.jsx prefers rawURL for the card thumbnail, so it never asks the Scratch CDN for these files
+        rawURL: `static/sparky-assets/${c.md5ext}`
+    })),
+    sounds: [],
+    variables: {},
+    blocks: {},
+    // without isPublic the card shows the membership tag and star
+    isPublic: true
+}], null, 4) + '\n';
+
+/**
+ * @param {string} dir folder of md5-named files
+ * @returns {string[]} the md5-named files in it (the only files we may delete)
+ */
+const md5Files = dir => (fs.existsSync(dir) ? fs.readdirSync(dir).filter(name => MD5_FILE.test(name)) : []);
+
+/**
  * @returns {string[]} md5-named files the previous generated module imported (the only files we may delete)
  */
 const previouslyGenerated = () => {
@@ -210,6 +250,13 @@ const main = () => {
     for (const c of costumes) fs.writeFileSync(path.join(OUT_DIR, c.md5ext), c.bytes);
     fs.writeFileSync(OUT_MODULE, renderModule(costumes));
 
+    fs.mkdirSync(STATIC_DIR, {recursive: true});
+    for (const stale of md5Files(STATIC_DIR)) {
+        if (!keep.has(stale)) fs.rmSync(path.join(STATIC_DIR, stale), {force: true});
+    }
+    for (const c of costumes) fs.writeFileSync(path.join(STATIC_DIR, c.md5ext), c.bytes);
+    fs.writeFileSync(OUT_LIBRARY, renderLibrary(costumes));
+
     console.table(costumes.map(c => ({
         name: c.name,
         file: c.file,
@@ -219,7 +266,8 @@ const main = () => {
         resolution: c.bitmapResolution,
         center: `${c.rotationCenterX},${c.rotationCenterY}`
     })));
-    console.log(`wrote ${keep.size} asset file(s) and ${path.relative(PACKAGE_ROOT, OUT_MODULE)}`);
+    console.log(`wrote ${keep.size} asset file(s), ${path.relative(PACKAGE_ROOT, OUT_MODULE)}, ` +
+        `${path.relative(PACKAGE_ROOT, STATIC_DIR)}/ and ${path.relative(PACKAGE_ROOT, OUT_LIBRARY)}`);
 };
 
 main();

@@ -7,6 +7,10 @@ import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import log from '../lib/log.js';
 import {PLATFORM} from '../lib/platform.js';
+import sparkySprites from '../lib/libraries/sparky-sprites.json';
+
+// one object for the life of the page: gui.jsx re-dispatches when this prop changes identity
+const dynamicAssets = {sprites: sparkySprites};
 
 const onClickLogo = () => {
     window.location = 'https://scratch.mit.edu';
@@ -69,6 +73,7 @@ export default appTarget => {
         simulateScratchDesktop ?
             <WrappedGui
                 canEditTitle
+                dynamicAssets={dynamicAssets}
                 platform={PLATFORM.DESKTOP}
                 showTelemetryModal
                 canSave={false}
@@ -78,6 +83,7 @@ export default appTarget => {
             /> :
             <WrappedGui
                 canEditTitle
+                dynamicAssets={dynamicAssets}
                 backpackVisible
                 showComingSoon
                 backpackHost={backpackHost}
