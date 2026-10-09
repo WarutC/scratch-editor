@@ -50,3 +50,14 @@ test('Add-extension button area is Sparky blue', async ({page}) => {
     await openEditor(page);
     expect(await bgOf(page.locator('[class*="extension-button-container"]').first())).toBe('rgb(10, 99, 203)');
 });
+
+test('tab icons use the Sparky tab accent, not Scratch purple', async ({page}) => {
+    await openEditor(page);
+    const icons = page.locator('[role="tab"] img');
+    expect(await icons.count()).toBeGreaterThanOrEqual(3);
+    const svgs = await icons.evaluateAll(imgs => Promise.all(imgs.map(img => fetch(img.src).then(r => r.text()))));
+    for (const svg of svgs) {
+        expect(svg.toLowerCase()).toContain('#226aee');
+        expect(svg.toLowerCase()).not.toContain('#855cd6');
+    }
+});
