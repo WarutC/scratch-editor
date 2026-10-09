@@ -1,5 +1,6 @@
 @import "../../css/units.css";
 @import "../../css/colors.css";
+@import "../../css/sparky-tokens.css";
 @import "../../css/z-index.css";
 
 .extension-button-container {
@@ -10,9 +11,9 @@
     left: 0;
     right: 0;
     z-index: $z-index-extension-button;
-    background: $looks-secondary;
+    background: $sparky-blue;
 
-    border: 1px solid $looks-secondary;
+    border: 1px solid $sparky-blue;
     box-sizing: content-box; /* To match scratch-block vertical toolbox borders */
 }
 

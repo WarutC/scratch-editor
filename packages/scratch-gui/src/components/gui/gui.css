@@ -1,5 +1,6 @@
 @import "../../css/units.css";
 @import "../../css/colors.css";
+@import "../../css/sparky-tokens.css";
 @import "../../css/z-index.css";
 
 .page-wrapper {
@@ -127,7 +128,7 @@
 
 .tab.is-selected {
     height: 90%;
-    color: $looks-secondary;
+    color: $sparky-tab-accent;
     background-color: $ui-white;
     z-index: 4; /* Make sure selected is always above */
 }

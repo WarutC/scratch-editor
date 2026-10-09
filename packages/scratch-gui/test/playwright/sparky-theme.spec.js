@@ -39,3 +39,14 @@ test('Share button is Sparky yellow with a navy label (when the editor offers Sh
     expect(await bgOf(share)).toBe('rgb(254, 206, 5)');
     expect(await share.evaluate(el => getComputedStyle(el).color)).toBe('rgb(0, 44, 105)');
 });
+
+test('selected tab label uses the Sparky tab accent', async ({page}) => {
+    await openEditor(page);
+    const tab = page.locator('[role="tab"][class*="is-selected"]').first();
+    expect(await tab.evaluate(el => getComputedStyle(el).color)).toBe('rgb(34, 106, 238)');
+});
+
+test('Add-extension button area is Sparky blue', async ({page}) => {
+    await openEditor(page);
+    expect(await bgOf(page.locator('[class*="extension-button-container"]').first())).toBe('rgb(10, 99, 203)');
+});
