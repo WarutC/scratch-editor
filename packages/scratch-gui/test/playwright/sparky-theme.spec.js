@@ -159,7 +159,7 @@ test('floating add-sprite and add-backdrop buttons are Sparky blue', async ({pag
 test('selected sprite tile uses a Sparky blue border, name label and delete badge', async ({page}) => {
     await openEditor(page);
     const tile = page.locator('[class*="sprite-selector-item_is-selected"]').first();
-    await expect(tile).toContainText('Sprite1');
+    await expect(tile).toContainText('Firefly');
     expect(await tile.evaluate(el => getComputedStyle(el).borderTopColor)).toBe(SPARKY_BLUE);
     const label = tile.locator('[class*="sprite-selector-item_sprite-info"]');
     expect(await label.evaluate(el => getComputedStyle(el).backgroundColor)).toBe(SPARKY_BLUE);
@@ -229,5 +229,42 @@ test('Sparky command blocks show no [object Object] bubble or tooltip', async ({
         }
         await expect(bubble).toHaveCount(0); // a command has nothing to report
     }
+    expect(pageErrors).toEqual([]);
+});
+
+// A new project starts with the Firefly mascot (12 bundled PNG costumes) instead of Scratch Cat.
+test('a new project has the Firefly sprite with 12 costumes, drawn on the stage', async ({page}) => {
+    const failed = [];
+    // env-config.js is an optional deployment file that the file:// build never has; unrelated to the sprite.
+    const record = url => {
+        if (!url.endsWith('/env-config.js')) failed.push(url);
+    };
+    page.on('requestfailed', request => record(request.url()));
+    page.on('response', response => {
+        if (response.status() >= 400) record(`${response.status()} ${response.url()}`);
+    });
+    const pageErrors = await openEditor(page);
+
+    const tile = page.locator('[class*="sprite-selector-item_is-selected"]').first();
+    await expect(tile).toContainText('Firefly');
+    await expect(page.getByText('Sprite1', {exact: true})).toHaveCount(0);
+
+    // The stage shows the sprite: hiding it changes the rendered stage, showing it again restores it.
+    const stage = page.locator('[class*="stage_stage"]').first();
+    await page.getByLabel('Hide sprite').click();
+    const hidden = await stage.screenshot();
+    await page.getByLabel('Show sprite').click();
+    await expect.poll(async () => (await stage.screenshot()).equals(hidden), {timeout: 10000}).toBe(false);
+
+    await page.getByRole('tab', {name: 'Costumes'}).click();
+    const costumes = page.locator(
+        '[class*="asset-panel_wrapper"] [class*="sprite-selector-item_sprite-selector-item"]'
+    );
+    await expect(costumes).toHaveCount(12);
+    await expect(costumes.first()).toContainText('Walking');
+    for (const thumbnail of await costumes.locator('img').all()) {
+        await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    }
+    expect(failed).toEqual([]);
     expect(pageErrors).toEqual([]);
 });

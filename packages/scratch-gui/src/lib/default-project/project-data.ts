@@ -1,6 +1,7 @@
 import projectDataMessages from './messages';
 import sharedMessages from '../shared-messages';
 import {MessageObject, TranslatorFunction} from '../../gui-config';
+import {fireflyCostumes} from './firefly/firefly-costumes';
 
 const messages = {...projectDataMessages, ...sharedMessages};
 
@@ -54,32 +55,13 @@ const projectData = (translateFunction?: TranslatorFunction): object => {
             },
             {
                 isStage: false,
-                name: translator(messages.sprite, {index: 1}),
+                name: 'Firefly',
                 variables: {},
                 lists: {},
                 broadcasts: {},
                 blocks: {},
                 currentCostume: 0,
-                costumes: [
-                    {
-                        assetId: 'bcf454acf82e4504149f7ffe07081dbc',
-                        name: translator(messages.costume, {index: 1}),
-                        bitmapResolution: 1,
-                        md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 48,
-                        rotationCenterY: 50
-                    },
-                    {
-                        assetId: '0fb9be3e8397c983338cb71dc84d0b25',
-                        name: translator(messages.costume, {index: 2}),
-                        bitmapResolution: 1,
-                        md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 46,
-                        rotationCenterY: 53
-                    }
-                ],
+                costumes: fireflyCostumes,
                 sounds: [
                     {
                         assetId: '83c36d806dc92327b9e7049a565c6bff',
