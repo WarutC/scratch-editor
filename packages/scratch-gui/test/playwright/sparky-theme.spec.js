@@ -268,3 +268,15 @@ test('a new project has the Firefly sprite with 12 costumes, drawn on the stage'
     expect(failed).toEqual([]);
     expect(pageErrors).toEqual([]);
 });
+
+test('direction dial face is Sparky blue, not Scratch purple', async ({page}) => {
+    await openEditor(page);
+    await page.getByLabel('Direction', {exact: true}).click(); // focusing the field opens the dial popover
+    const dial = page.locator('[class*="dial_dial-face"]');
+    await expect(dial).toBeVisible();
+    const svg = await svgOf(dial);
+    expect(svg).toContain('#c2d8f2');
+    expect(svg).toContain('#0a63cb');
+    expect(svg).not.toContain('#ccb3ff');
+    expect(svg).not.toContain('#a071fe');
+});
