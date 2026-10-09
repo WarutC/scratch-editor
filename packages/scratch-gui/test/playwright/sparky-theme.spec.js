@@ -61,3 +61,13 @@ test('tab icons use the Sparky tab accent, not Scratch purple', async ({page}) =
         expect(svg.toLowerCase()).not.toContain('#855cd6');
     }
 });
+
+test('menu bar shows the Sparky logo at the Figma height', async ({page}) => {
+    await openEditor(page);
+    const logo = page.locator('#logo_img');
+    await expect(logo).toHaveAttribute('alt', 'Sparky');
+    const box = await logo.boundingBox();
+    expect(box).not.toBeNull();
+    expect(Math.round(box.height)).toBe(34); // Figma logo_sparky is 116 x 34
+    expect(box.width / box.height).toBeCloseTo(116 / 34, 1);
+});

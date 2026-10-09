@@ -44,7 +44,7 @@
     opacity: 0;
 }
 .scratch-logo {
-    height:  1.6rem;
+    height:  2.125rem; /* 34px: Figma logo_sparky is 116 x 34 */
     vertical-align: middle;
 }
 
