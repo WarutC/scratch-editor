@@ -11,7 +11,7 @@
             <use xlink:href="#path-1"></use>
         </mask>
         <g id="Trash-Can"></g>
-        <g id="White" mask="url(#mask-2)" fill="#855CD6">
+        <g id="White" mask="url(#mask-2)" fill="#0A63CB">
             <rect id="Color" x="0" y="0" width="20" height="20"></rect>
         </g>
     </g>

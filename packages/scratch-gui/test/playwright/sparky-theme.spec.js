@@ -125,11 +125,63 @@ test('connection modal has a Sparky blue header, a dark blue close button and th
     expect(box.width).toBeGreaterThan(300); // readable, not the old 120 px icon slot
     expect(box.width / box.height).toBeCloseTo(632 / 393, 1);
 
-    // Other modals keep their own header colour.
+    // Other modals (here the extension library) are Sparky blue too, since the whole UI accent is blue now.
     await page.getByRole('button', {name: 'Start Searching'}).click();
     await page.locator('[class*="close-button_close-button"]').first()
         .click();
     await page.locator('[class*="extension-button-container"] button').click();
     const libHeader = page.locator('[class*="modal_header"]').first();
-    expect(await bgOf(libHeader)).not.toBe('rgb(10, 99, 203)');
+    expect(await bgOf(libHeader)).toBe('rgb(10, 99, 203)');
+});
+
+const SPARKY_BLUE = 'rgb(10, 99, 203)';
+const OLD_PURPLE = 'rgb(133, 92, 214)';
+
+// Large SVGs are emitted as files; the build is served from file://, which fetch() cannot read.
+const svgOf = async img => {
+    const src = await img.evaluate(el => el.src);
+    if (src.startsWith('file:')) return fs.readFileSync(fileURLToPath(src), 'utf8').toLowerCase();
+    return (await img.evaluate(el => fetch(el.src).then(r => r.text()))).toLowerCase();
+};
+
+test('floating add-sprite and add-backdrop buttons are Sparky blue', async ({page}) => {
+    await openEditor(page);
+    const mains = page.locator('[class*="action-menu_main-button"]');
+    expect(await mains.count()).toBeGreaterThanOrEqual(2); // sprite and backdrop
+    for (const title of ['Choose a Sprite', 'Choose a Backdrop']) {
+        const button = page.locator(`[class*="action-menu_main-button"][aria-label="${title}"], ` +
+            `[class*="action-menu_main-button"][title="${title}"]`).first();
+        await expect(button).toBeAttached();
+        expect(await button.evaluate(el => getComputedStyle(el).backgroundColor)).toBe(SPARKY_BLUE);
+    }
+});
+
+test('selected sprite tile uses a Sparky blue border, name label and delete badge', async ({page}) => {
+    await openEditor(page);
+    const tile = page.locator('[class*="sprite-selector-item_is-selected"]').first();
+    await expect(tile).toContainText('Sprite1');
+    expect(await tile.evaluate(el => getComputedStyle(el).borderTopColor)).toBe(SPARKY_BLUE);
+    const label = tile.locator('[class*="sprite-selector-item_sprite-info"]');
+    expect(await label.evaluate(el => getComputedStyle(el).backgroundColor)).toBe(SPARKY_BLUE);
+    const badge = tile.locator('[class*="delete-button_delete-button-visible"]');
+    expect(await badge.evaluate(el => getComputedStyle(el).backgroundColor)).toBe(SPARKY_BLUE);
+});
+
+test('selected stage-size and Show toggles are tinted Sparky blue, not Scratch purple', async ({page}) => {
+    await openEditor(page);
+    const selected = page.locator('[class*="toggle-buttons_button"][aria-pressed="true"]');
+    const stageToggle = page.locator('[class*="stage-header_stage-size-row"] ' +
+        '[class*="toggle-buttons_button"][aria-pressed="true"]').first();
+    const showToggle = page.locator('[class*="toggle-buttons_button"][aria-pressed="true"][aria-label="Show sprite"]');
+    await expect(stageToggle).toBeVisible();
+    await expect(showToggle).toBeVisible();
+    expect(await selected.count()).toBeGreaterThanOrEqual(2);
+    for (const toggle of [stageToggle, showToggle]) {
+        const bg = await toggle.evaluate(el => getComputedStyle(el).backgroundColor);
+        expect(bg).not.toBe(OLD_PURPLE);
+        expect(bg).toBe('rgba(10, 99, 203, 0.15)'); // Sparky blue at 15% over white = #DBE8F7
+        const svg = await svgOf(toggle.locator('img'));
+        expect(svg).toContain('#0a63cb');
+        expect(svg).not.toContain('#855cd6');
+    }
 });
