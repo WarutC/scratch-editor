@@ -135,7 +135,7 @@ test('FR45 fallback: a scanner-less board shows the one-shot QR toast', async t 
 test('FR45: disconnected board sends nothing and the reporter stays mock-empty', async t => {
     const {ext, sent} = makeExt({connected: false});
     const r = await ext.setQrScan({STATE: 'on'});
-    t.equal(r, null, 'send short-circuits to null when disconnected');
+    t.equal(typeof r, 'undefined', 'a command reports nothing (not null: that would show a "null" bubble)');
     t.equal(sent.length, 0, 'no command written');
     t.equal(ext.lastScannedText(), '', 'reporter mock-empty');
     t.end();
@@ -146,7 +146,7 @@ test('12.3: a board that announced features but lacks qr_scan → toast, no send
     const {ext, sent, emits} = makeExt();
     ext._peripheral._capabilities = new Set(['gpio', 'imu']); // announced, no qr_scan
     const r = await ext.setQrScan({STATE: 'on'});
-    t.equal(r, null, 'gated before send');
+    t.equal(typeof r, 'undefined', 'gated before send, and reports nothing');
     t.equal(sent.length, 0, 'no qr_scan_enable written');
     const warnings = emits.filter(e => e.ev === 'SPARK_STUB_WARNING' && e.payload.family === 'qr');
     t.equal(warnings.length, 1, 'one-shot QR toast');

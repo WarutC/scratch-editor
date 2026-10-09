@@ -185,3 +185,49 @@ test('selected stage-size and Show toggles are tinted Sparky blue, not Scratch p
         expect(svg).not.toContain('#855cd6');
     }
 });
+
+// Clicking a command block in the flyout runs it, and scratch-vm shows whatever the block returned in a value
+// bubble (String(value)). A Sparky command used to return the middleware reply object, so the bubble read
+// "[object Object]". Hovering a block never produces a tooltip (no Sparky block defines one).
+test('Sparky command blocks show no [object Object] bubble or tooltip', async ({page}) => {
+    const received = [];
+    // Stand-in for the middleware: acknowledge every request with an object reply, as the real one does.
+    await page.routeWebSocket('ws://localhost:8080', ws => {
+        ws.onMessage(message => {
+            const request = JSON.parse(String(message));
+            received.push(request.cmd);
+            ws.send(JSON.stringify({protocol: '1.0', type: 'response', id: request.id, status: 'ok'}));
+        });
+    });
+    const pageErrors = await openEditor(page);
+    await page.locator('[class*="extension-button-container"] button').click();
+    await page.locator('[class*="library-item_library-item"]').first()
+        .click();
+    await page.getByRole('button', {name: 'Start Searching'}).click();
+    await page.getByRole('button', {name: 'Go to Editor'}).click();
+
+    const bubble = page.locator('.valueReportBox');
+    const tooltip = page.locator('.blocklyTooltipDiv');
+    for (const opcode of ['setLedColor', 'setLedBrightness', 'playTone', 'stopBuzzer']) {
+        const block = page.locator(`.blocklyFlyout g.blocklyBlock[class*="${opcode}"]`).first();
+        await expect(block).toBeVisible();
+
+        // Hover: no tooltip may appear, and certainly not an object stringification.
+        const box = await block.boundingBox();
+        await page.mouse.move(box.x + 30, box.y + 20, {steps: 5});
+        await page.waitForTimeout(1000); // Blockly's tooltip hover delay is 750 ms
+        expect(await tooltip.textContent()).not.toContain('[object Object]');
+        await expect(tooltip).toBeHidden();
+
+        // Click: the block runs; wait for the middleware to have been asked, then give the reply time to settle.
+        const before = received.length;
+        await block.click({position: {x: 30, y: 20}});
+        await expect.poll(() => received.length).toBeGreaterThan(before);
+        await page.waitForTimeout(400);
+        for (const text of await bubble.allTextContents()) {
+            expect(text).not.toContain('[object Object]');
+        }
+        await expect(bubble).toHaveCount(0); // a command has nothing to report
+    }
+    expect(pageErrors).toEqual([]);
+});

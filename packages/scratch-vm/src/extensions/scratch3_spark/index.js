@@ -146,6 +146,12 @@ const AI_MOCK_LABEL = {
 // leaving the middleware talking to itself.
 const AI_TIMEOUT_MS = {face_id: 8000};
 
+// A COMMAND block must not report a value. execute.js shows String(returnValue) in a bubble when a
+// stack-clicked block returns anything other than undefined, so a command that handed back the middleware
+// reply object (or null when no board is connected) popped up "[object Object]" / "null". Commands still
+// return their promise so the thread waits for the board's acknowledgement; they just resolve to nothing.
+const reportsNothing = () => {};
+
 class SparkPeripheral {
     constructor (runtime, extensionId) {
         this._runtime = runtime;
@@ -1050,7 +1056,7 @@ class Scratch3SparkBlocks {
         const target = LED_TARGETS.find(t => t.value === args.WHICH);
         const payload = {pin: 2, ...color};
         if (target && target.index !== null) payload.index = target.index;
-        return this._peripheral.send('led', payload);
+        return this._peripheral.send('led', payload).then(reportsNothing);
     }
 
     setLedBrightness (args) {
@@ -1059,7 +1065,7 @@ class Scratch3SparkBlocks {
         const target = LED_TARGETS.find(t => t.value === args.WHICH);
         const payload = {pin: 2, val};
         if (target && target.index !== null) payload.index = target.index;
-        return this._peripheral.send('pwm', payload);
+        return this._peripheral.send('pwm', payload).then(reportsNothing);
     }
 
     whenButtonPressed (args) {
@@ -1089,11 +1095,11 @@ class Scratch3SparkBlocks {
     playTone (args) {
         const freq = Math.max(0, Number(args.FREQ) || 0);
         const dur = Math.max(0, Number(args.DUR) || 0);
-        return this._peripheral.send('buzz', {freq, dur});
+        return this._peripheral.send('buzz', {freq, dur}).then(reportsNothing);
     }
 
     stopBuzzer () {
-        return this._peripheral.send('buzz', {freq: 0, dur: 0});
+        return this._peripheral.send('buzz', {freq: 0, dur: 0}).then(reportsNothing);
     }
 
     imuAccelX () {
@@ -1127,8 +1133,8 @@ class Scratch3SparkBlocks {
     setImuFusion (args) {
         // Story 3.11 — pick the orientation fusion algorithm at runtime.
         const algo = args.ALGO;
-        if (!['none', 'complementary', 'kalman', 'madgwick', 'mahony'].includes(algo)) return Promise.resolve(null);
-        return this._peripheral.send('set_imu_fusion', {algo});
+        if (!['none', 'complementary', 'kalman', 'madgwick', 'mahony'].includes(algo)) return Promise.resolve();
+        return this._peripheral.send('set_imu_fusion', {algo}).then(reportsNothing);
     }
 
     whenShake () {
@@ -1146,8 +1152,8 @@ class Scratch3SparkBlocks {
 
     setShakeSensitivity (args) {
         const level = parseInt(args.LEVEL, 10);
-        if (![1, 2, 3].includes(level)) return Promise.resolve(null);
-        return this._peripheral.send('set_shake_threshold', {level});
+        if (![1, 2, 3].includes(level)) return Promise.resolve();
+        return this._peripheral.send('set_shake_threshold', {level}).then(reportsNothing);
     }
 
     // ── Mic / Light / TOF (Stories 3.7/3.8/3.9, SCP #4) — live on a board with
@@ -1185,13 +1191,13 @@ class Scratch3SparkBlocks {
         return false;
     }
     setMicThreshold (args) {
-        return this._peripheral._setSensorThreshold('mic', parseInt(args.LEVEL, 10));
+        return this._peripheral._setSensorThreshold('mic', parseInt(args.LEVEL, 10)).then(reportsNothing);
     }
     setLightThreshold (args) {
-        return this._peripheral._setSensorThreshold('light', parseInt(args.LEVEL, 10));
+        return this._peripheral._setSensorThreshold('light', parseInt(args.LEVEL, 10)).then(reportsNothing);
     }
     setTofThreshold (args) {
-        return this._peripheral._setSensorThreshold('tof', parseInt(args.LEVEL, 10));
+        return this._peripheral._setSensorThreshold('tof', parseInt(args.LEVEL, 10)).then(reportsNothing);
     }
 
     // ── On-device AI (ai.classify) — Story 4.5. Each reporter returns the inference
@@ -1236,7 +1242,7 @@ class Scratch3SparkBlocks {
     setQrScan (args) {
         // No board → no-op (no toast: "no scanner" is only meaningful on a
         // connected board; mirrors the sensor reporters' isConnected guard).
-        if (!this._peripheral.isConnected()) return Promise.resolve(null);
+        if (!this._peripheral.isConnected()) return Promise.resolve();
         // Story 12.3/FR45 — a board that announced its features but lacks qr_scan
         // (e.g. camera-less substrate): one-shot Thai toast, no command sent. This
         // is DISTINCT from the no-board case above (which is silent). A legacy
@@ -1247,7 +1253,7 @@ class Scratch3SparkBlocks {
                 this._peripheral._stubWarningShown.add('qr');
                 this._peripheral._showStubToast('qr');
             }
-            return Promise.resolve(null);
+            return Promise.resolve();
         }
         const enable = args.STATE === 'on';
         // Arm/cancel the FR49 "nothing decoded" hint alongside the command.
@@ -1264,7 +1270,6 @@ class Scratch3SparkBlocks {
                     this._peripheral._showStubToast('qr');
                 }
             }
-            return resp;
         }, () => {
             // 12-7 review P9: the send rejected (no_transport / timeout / WS
             // drop) — scanning never started, so the armed 5 s hint would fire
