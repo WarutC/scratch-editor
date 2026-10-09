@@ -8,5 +8,6 @@
 
 .share-button-is-shared {
     background: $ui-black-transparent;
+    color: $ui-white;
     cursor: default;
 }
