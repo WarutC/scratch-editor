@@ -10,3 +10,6 @@ $sparky-tab-accent: #226AEE;
 $sparky-blue-transparent: rgba(10, 99, 203, 0.35);
 $sparky-blue-light-transparent: rgba(10, 99, 203, 0.15);
 $sparky-blue-dark: #074A9C;
+$sparky-hover: #226AEE;
+$sparky-hover-transparent: rgba(34, 106, 238, 0.35);
+$sparky-hover-light: #D6E6FF;

@@ -218,9 +218,20 @@
     right: -15px;
     left: -15px;
     padding: 5px 5px;
-    background-color: $pen-primary;
+    background-color: $sparky-blue;
     border-radius: 100%;
-    box-shadow: 0px 0px 0px 4px $pen-transparent;
+    box-shadow: 0px 0px 0px 4px $sparky-blue-transparent;
+}
+
+/*
+    On the full-width Sparky banner the badge hangs off the left edge of the modal (the stock -15px offsets
+    assume a small device icon), so pull it inside the banner's top-left corner.
+*/
+.peripheral-activity:has(img[src*="spark-banner"]) .bluetooth-connecting-icon,
+.peripheral-activity:has(img[src*="spark-banner"]) .bluetooth-connected-icon {
+    top: 12px;
+    left: 12px;
+    right: auto;
 }
 
 @keyframes wiggle {
@@ -294,7 +305,7 @@
 }
 
 .help-step-number {
-    background: $pen-tertiary;
+    background: $sparky-blue-dark;
     border-radius: 100%;
     display: flex;
     justify-content: center;

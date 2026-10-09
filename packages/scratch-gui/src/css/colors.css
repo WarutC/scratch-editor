@@ -51,10 +51,12 @@ $error-primary: hsla(30, 100%, 55%, 1); /* #FF8C1A */
 $error-light: hsla(30, 100%, 70%, 1); /* #FFB366 */
 $error-transparent: hsla(30, 100%, 55%, 0.25); /* #FF8C1A */
 
-$extensions-primary: hsla(163, 85%, 40%, 1); /* #0FBD8C */
-$extensions-tertiary: hsla(163, 85%, 30%, 1); /* #0B8E69 */
-$extensions-transparent: hsla(163, 85%, 40%, 0.35); /* 35% transparent version of extensions-primary */
-$extensions-light: hsla(163, 57%, 85%, 1); /* opaque version of extensions-transparent, on white bg */
+/* The Scratch extensions green (hover on the add buttons, their tooltips, tutorial cards, alerts, spinner) is
+   Sparky blue too; the green $pen-* and $ui-green values stay for status colours. */
+$extensions-primary: $sparky-hover; /* #226AEE */
+$extensions-tertiary: $sparky-blue-dark; /* #074A9C */
+$extensions-transparent: $sparky-hover-transparent; /* 35% transparent version of extensions-primary */
+$extensions-light: $sparky-hover-light; /* opaque version of extensions-transparent, on white bg */
 
 $membership-blue: hsla(215, 60%, 46%, 1); /* #2F6ABC */
 $drop-highlight: hsla(215, 100%, 77%, 1); /* lighter than motion-primary */
