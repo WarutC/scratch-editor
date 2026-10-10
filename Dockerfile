@@ -64,8 +64,8 @@ COPY --from=builder /src/VERSION /usr/share/nginx/html/VERSION
 
 # /firmware/ (OTA manifest + signed .bin) and /releases/ (download page + installers) are NOT in the image: the
 # host mounts them read-only from ~/scratch-editor-deploy/www/, which the WarutC/spark-firmware-releases
-# publish-site workflow fills from its GitHub releases. Empty mount points keep the html root read-only friendly.
-RUN mkdir -p /usr/share/nginx/html/firmware /usr/share/nginx/html/releases
+# publish-site workflow fills from its GitHub releases. Docker creates the mount points when the container is
+# created (this stage runs as the unprivileged nginx user, so it could not mkdir under the root-owned html dir).
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 # Flat path under /usr/share/ — avoids /etc/nginx/templates/ (the base image's
