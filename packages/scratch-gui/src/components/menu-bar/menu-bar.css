@@ -130,15 +130,18 @@
 }
 
 .remix-button {
-    background-color: $pen-primary
+    background-color: $sparky-yellow;
+    color: $sparky-navy;
 }
 
 .remix-button-icon {
     height: 1.25rem;
 }
 
+/* Coming-soon items (Share, My Stuff, the profile chip) keep full colour: at half opacity the Sparky yellow over
+   the blue bar reads as olive green. Their tooltip still says "coming soon". */
 .coming-soon >:not(.coming-soon-tooltip) {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .account-info-group {
