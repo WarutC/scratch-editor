@@ -67,7 +67,7 @@ ConnectionModalComponent.propTypes = {
     connectionTipIconURL: PropTypes.string,
     name: PropTypes.node,
     onCancel: PropTypes.func.isRequired,
-    onHelp: PropTypes.func.isRequired,
+    onHelp: PropTypes.func,
     phase: PropTypes.oneOf(Object.keys(PHASES)).isRequired,
     prescanMessage: PropTypes.node,
     scanBeginMessage: PropTypes.node,

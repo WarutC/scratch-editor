@@ -4,10 +4,6 @@ import {PLATFORM} from '../lib/platform.js';
 
 import log from '../lib/log.js';
 
-const onClickLogo = () => {
-    window.location = 'https://scratch.mit.edu';
-};
-
 const handleTelemetryModalCancel = () => {
     log('User canceled telemetry modal');
 };
@@ -74,8 +70,7 @@ export default appTarget => {
             backpackVisible: true,
             showComingSoon: true,
             backpackHost,
-            canSave: false,
-            onClickLogo
+            canSave: false
         });
     }
 };

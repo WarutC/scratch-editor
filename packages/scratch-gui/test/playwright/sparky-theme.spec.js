@@ -231,7 +231,7 @@ test('Sparky command blocks show no [object Object] bubble or tooltip', async ({
     expect(pageErrors).toEqual([]);
 });
 
-// A new project starts with the Firefly mascot (12 bundled PNG costumes) instead of Scratch Cat.
+// A new project starts with the Firefly mascot (12 bundled SVG costumes) instead of Scratch Cat.
 test('a new project has the Firefly sprite with 12 costumes, drawn on the stage', async ({page}) => {
     const failed = [];
     // env-config.js is an optional deployment file that the file:// build never has; unrelated to the sprite.
@@ -316,4 +316,73 @@ test('direction dial face is Sparky blue, not Scratch purple', async ({page}) =>
     expect(svg).toContain('#0a63cb');
     expect(svg).not.toContain('#ccb3ff');
     expect(svg).not.toContain('#a071fe');
+});
+
+// Spark has no help page yet, so the connection modal offers no Help button that would open a blank tab.
+test('the Sparky connection modal has no Help button', async ({page}) => {
+    await openEditor(page);
+    await page.locator('[class*="extension-button-container"] button').click();
+    await page.locator('[class*="library-item_library-item"]').first()
+        .click();
+    await expect(page.getByRole('button', {name: 'Start Searching'})).toBeVisible();
+    await expect(page.locator('[class*="modal_header-item-help"]')).toHaveCount(0);
+    await expect(page.getByText('Help', {exact: true})).toHaveCount(0);
+});
+
+// Where the logo should lead is still open, so it is not a link.
+test('the menu bar logo is not clickable', async ({page}) => {
+    await openEditor(page);
+    const logo = page.locator('#logo_img');
+    expect(await logo.evaluate(el => getComputedStyle(el).cursor)).not.toBe('pointer');
+    const before = page.url();
+    await logo.click();
+    await page.waitForTimeout(300);
+    expect(page.url()).toBe(before);
+});
+
+test('the profile chip shows the Sparky bee head', async ({page}) => {
+    await openEditor(page);
+    const avatar = page.locator('[class*="menu-bar_profile-icon"]').first();
+    await expect(avatar).toBeVisible();
+    const svg = await svgOf(avatar);
+    expect(svg).toContain('#fece05'); // yellow tile
+    expect(svg).not.toContain('<image'); // vector bee, no embedded bitmap
+});
+
+test('debug modal chrome is Sparky blue, not Scratch green', async ({page}) => {
+    await openEditor(page);
+    await page.getByLabel('Debug', {exact: true}).click();
+    const title = page.getByText('Debugging | Getting Unstuck');
+    await expect(title).toBeVisible();
+    expect(await bgOf(title)).toBe(SPARKY_BLUE);
+    const active = page.locator('[class*="debug-modal_topic-item"][class*="debug-modal_active"]').first();
+    expect(await active.evaluate(el => getComputedStyle(el).color)).toBe(SPARKY_BLUE);
+    expect(await bgOf(active)).toBe('rgb(214, 230, 255)');
+});
+
+test('paint editor tools and buttons are Sparky blue, not Scratch purple', async ({page}) => {
+    await openEditor(page);
+    await page.getByRole('tab', {name: 'Costumes'}).click();
+    const selectedTool = page.locator('[class*="tool-select-base_is-selected"]').first();
+    await expect(selectedTool).toBeVisible();
+    expect(await bgOf(selectedTool)).toBe(SPARKY_BLUE);
+    const html = await page.evaluate(() => [...document.querySelectorAll('style')].map(s => s.textContent)
+        .join('\n'));
+    expect(html).not.toMatch(/855CD6/i);
+    for (const img of await page.locator('[class*="paint-editor_editor-container"] img').all()) {
+        expect(await img.evaluate(el => decodeURIComponent(el.src))).not.toMatch(/855CD6/i);
+    }
+});
+
+// Half-transparent yellow over the blue bar reads as olive green, so coming-soon items are not faded.
+test('coming-soon Share button and profile chip keep their full Sparky yellow', async ({page}) => {
+    await openEditor(page);
+    for (const locator of [
+        page.locator('[class*="menu-bar_coming-soon"]').filter({hasText: 'Share'}),
+        page.locator('[class*="menu-bar_coming-soon"]').filter({has: page.locator('[class*="menu-bar_profile-icon"]')})
+    ]) {
+        const opacities = await locator.first().evaluate(el => [el, ...el.querySelectorAll('*')]
+            .map(n => getComputedStyle(n).opacity));
+        expect(opacities.every(o => o === '1')).toBe(true);
+    }
 });

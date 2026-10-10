@@ -75,20 +75,22 @@ const UnavailableStep = props => (
                         id="gui.connection.unavailable.tryagainbutton"
                     />
                 </button>
-                <button
-                    className={styles.connectionButton}
-                    onClick={props.onHelp}
-                >
-                    <img
-                        className={styles.buttonIconLeft}
-                        src={helpIcon}
-                    />
-                    <FormattedMessage
-                        defaultMessage="Help"
-                        description="Button to view help content"
-                        id="gui.connection.unavailable.helpbutton"
-                    />
-                </button>
+                {props.onHelp && (
+                    <button
+                        className={styles.connectionButton}
+                        onClick={props.onHelp}
+                    >
+                        <img
+                            className={styles.buttonIconLeft}
+                            src={helpIcon}
+                        />
+                        <FormattedMessage
+                            defaultMessage="Help"
+                            description="Button to view help content"
+                            id="gui.connection.unavailable.helpbutton"
+                        />
+                    </button>
+                )}
             </Box>
         </Box>
     </Box>

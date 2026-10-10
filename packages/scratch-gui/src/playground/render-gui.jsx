@@ -12,10 +12,6 @@ import sparkySprites from '../lib/libraries/sparky-sprites.json';
 // one object for the life of the page: gui.jsx re-dispatches when this prop changes identity
 const dynamicAssets = {sprites: sparkySprites};
 
-const onClickLogo = () => {
-    window.location = 'https://scratch.mit.edu';
-};
-
 const handleTelemetryModalCancel = () => {
     log('User canceled telemetry modal');
 };
@@ -88,7 +84,6 @@ export default appTarget => {
                 showComingSoon
                 backpackHost={backpackHost}
                 canSave={false}
-                onClickLogo={onClickLogo}
             />
     );
 };

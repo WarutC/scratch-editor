@@ -154,7 +154,7 @@ class ConnectionModal extends React.Component {
                 onConnected={this.handleConnected}
                 onConnecting={this.handleConnecting}
                 onDisconnect={this.handleDisconnect}
-                onHelp={this.handleHelp}
+                onHelp={this.state.extension && this.state.extension.helpLink ? this.handleHelp : null}
                 onScanning={this.handleScanning}
                 onSendPeripheralUpdate={canUpdatePeripheral ? this.handleSendUpdate : null}
                 onUpdatePeripheral={canUpdatePeripheral ? this.handleUpdatePeripheral : null}
