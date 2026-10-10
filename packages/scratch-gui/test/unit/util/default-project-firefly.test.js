@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import defaultProjectGenerator from '../../../src/lib/default-project/index';
 
-// The loaders in the generated module (`!arraybuffer-loader!./firefly/<md5>.png?`) resolve to a stub under jest
+// The loaders in the generated module (`!raw-loader!./firefly/<md5>.svg?`) resolve to a stub under jest
 // (see moduleNameMapper in package.json), so the asset bytes are checked on disk instead.
 const FIREFLY_DIR = path.join(__dirname, '../../../src/lib/default-project/firefly');
 
@@ -44,21 +44,22 @@ describe('Firefly default sprite', () => {
         }
     });
 
-    test('rotation centres and bitmap resolutions are usable numbers', () => {
+    test('every costume is vector art (SVG), so it stays sharp at any size', () => {
         for (const costume of sprite.costumes) {
-            expect(Number.isFinite(costume.rotationCenterX)).toBe(true);
-            expect(Number.isFinite(costume.rotationCenterY)).toBe(true);
-            expect(costume.rotationCenterX).toBeGreaterThan(0);
-            expect(costume.rotationCenterY).toBeGreaterThan(0);
-            expect(costume.bitmapResolution).toBeGreaterThanOrEqual(1);
+            expect(costume.dataFormat).toBe('svg');
+            expect(costume.bitmapResolution).toBe(1);
+        }
+        for (const asset of assets.filter(a => sprite.costumes.some(c => c.assetId === a.id))) {
+            expect(asset.assetType).toBe('ImageVector');
+            expect(asset.dataFormat).toBe('SVG');
         }
     });
 
-    test('rotation centre is the middle of the image, in pixels of the stored file (scratch-vm convention)', () => {
+    test('rotation centre is the middle of the SVG viewBox', () => {
         for (const costume of sprite.costumes) {
-            const bytes = fs.readFileSync(path.join(FIREFLY_DIR, costume.md5ext));
-            const width = bytes.readUInt32BE(16); // PNG IHDR
-            const height = bytes.readUInt32BE(20);
+            const text = fs.readFileSync(path.join(FIREFLY_DIR, costume.md5ext), 'utf8');
+            const [, , width, height] = (/viewBox="([^"]+)"/).exec(text)[1].split(/\s+/)
+                .map(Number);
             expect(costume.rotationCenterX).toBe(Math.round(width / 2));
             expect(costume.rotationCenterY).toBe(Math.round(height / 2));
         }

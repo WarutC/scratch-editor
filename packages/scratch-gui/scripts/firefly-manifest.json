@@ -1,14 +1,14 @@
 [
-    {"name": "Walking", "file": "walking-a.png", "bitmapResolution": 1},
-    {"name": "Walking-on", "file": "walking-b.png", "bitmapResolution": 1},
-    {"name": "Flight", "file": "flight-a.png", "bitmapResolution": 2},
-    {"name": "Flight-on", "file": "flight-b.png", "bitmapResolution": 2},
-    {"name": "Waving Hello", "file": "waving-hello-a.png", "bitmapResolution": 1},
-    {"name": "Waving Hello-on", "file": "waving-hello-b.png", "bitmapResolution": 1},
-    {"name": "Thumbs Up", "file": "thumbs-up-a.png", "bitmapResolution": 1},
-    {"name": "Thumbs Up-on", "file": "thumbs-up-b.png", "bitmapResolution": 1},
-    {"name": "Sleeping", "file": "sleeping-a.png", "bitmapResolution": 1},
-    {"name": "Sleeping-on", "file": "sleeping-b.png", "bitmapResolution": 1},
-    {"name": "Love Glow Heart", "file": "love-glow-heart-a.png", "bitmapResolution": 1},
-    {"name": "Love Glow Heart-on", "file": "love-glow-heart-b.png", "bitmapResolution": 1}
+    {"name": "Walking", "file": "Sparky_walk_01.svg"},
+    {"name": "Walking-on", "file": "Sparky_walk_02.svg"},
+    {"name": "Flight", "file": "Sparky_fly_01.svg"},
+    {"name": "Flight-on", "file": "Sparky_fly_02.svg"},
+    {"name": "Waving Hello", "file": "Sparky_waving_hello_01.svg"},
+    {"name": "Waving Hello-on", "file": "Sparky_waving_hello_02.svg"},
+    {"name": "Thumbs Up", "file": "Sparky_thumbs_up_01.svg"},
+    {"name": "Thumbs Up-on", "file": "Sparky_thumbs_up_02.svg"},
+    {"name": "Sleeping", "file": "Sparky_sleeping_01.svg"},
+    {"name": "Sleeping-on", "file": "Sparky_sleeping_02.svg"},
+    {"name": "Love Glow Heart", "file": "Sparky_love_01.svg"},
+    {"name": "Love Glow Heart-on", "file": "Sparky_love_02.svg"}
 ]

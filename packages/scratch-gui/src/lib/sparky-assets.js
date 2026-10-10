@@ -12,7 +12,7 @@ const SPARKY_MD5EXTS = new Set(
 );
 
 /**
- * @param {string} md5ext - e.g. "0ce6ff0d2836ad9a8a41f8a1d7a7c6ff.png"
+ * @param {string} md5ext - e.g. "a6614f5163518f21aeed296e96c52c9d.svg"
  * @returns {?string} the local URL for a Sparky asset, or null for any other asset
  */
 const sparkyAssetUrl = md5ext => (SPARKY_MD5EXTS.has(md5ext) ? `${SPARKY_ASSET_PATH}${md5ext}` : null);
