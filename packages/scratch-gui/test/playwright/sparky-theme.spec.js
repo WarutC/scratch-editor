@@ -386,3 +386,45 @@ test('coming-soon Share button and profile chip keep their full Sparky yellow', 
         expect(opacities.every(o => o === '1')).toBe(true);
     }
 });
+
+// QA: searching "firefly" in Choose a Costume found nothing while Choose a Sprite found the sprite. Each Firefly
+// costume is listed on its own, served from the editor's own origin like the sprite.
+test('Choose a Costume finds the 12 Firefly costumes and adds one, without Scratch hosts', async ({page}) => {
+    const scratchRequests = [];
+    await page.route(/scratch\.mit\.edu/, route => {
+        scratchRequests.push(route.request().url());
+        return route.abort();
+    });
+    const pageErrors = await openEditor(page);
+    await page.getByRole('tab', {name: 'Costumes'}).click();
+    await page.getByRole('button', {name: 'Choose a Costume'}).first()
+        .click();
+    await page.getByPlaceholder('Search').fill('firefly');
+    const cards = page.locator('[class*="library_library-scroll-grid"] > [class*="library-item_library-item"]');
+    await expect(cards).toHaveCount(12);
+    await expect(cards.filter({hasText: 'Firefly-Walking'})).toHaveCount(2); // Walking and Walking-on
+    // free to use: no membership star on the cards and no Membership filter
+    await expect(cards.locator('[class*="library-item_member-asset-icon"]'))
+        .toHaveCount(0);
+    await expect(page.getByRole('button', {name: 'Membership'})).toHaveCount(0);
+    for (const img of await cards.locator('img').all()) {
+        await expect.poll(() => img.evaluate(el => el.complete && el.naturalWidth > 0)).toBe(true);
+    }
+    await cards.filter({hasText: 'Firefly-Love Glow Heart-on'}).click();
+
+    const costumes = page.locator(
+        '[class*="asset-panel_wrapper"] [class*="sprite-selector-item_sprite-selector-item"]'
+    );
+    await expect(costumes).toHaveCount(13);
+    await expect(costumes.last()).toContainText('Firefly-Love Glow Heart-on');
+    const thumbnail = costumes.last().locator('img').first(); // the costume image, before the delete badge
+    await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    const fireflyFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'static', 'sparky-assets'));
+    expect(scratchRequests.filter(url => fireflyFiles.some(file => url.includes(file)))).toEqual([]);
+    expect(pageErrors).toEqual([]);
+});
+
+test('the profile chip reads "sparky" as in the Figma layout', async ({page}) => {
+    await openEditor(page);
+    await expect(page.locator('[class*="menu-bar_account-nav-menu"]')).toContainText('sparky');
+});

@@ -8,9 +8,10 @@ import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import log from '../lib/log.js';
 import {PLATFORM} from '../lib/platform.js';
 import sparkySprites from '../lib/libraries/sparky-sprites.json';
+import sparkyCostumes from '../lib/libraries/sparky-costumes.json';
 
 // one object for the life of the page: gui.jsx re-dispatches when this prop changes identity
-const dynamicAssets = {sprites: sparkySprites};
+const dynamicAssets = {sprites: sparkySprites, costumes: sparkyCostumes};
 
 const handleTelemetryModalCancel = () => {
     log('User canceled telemetry modal');

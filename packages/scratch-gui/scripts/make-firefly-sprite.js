@@ -9,6 +9,7 @@
  * It also publishes the same sprite to the Choose a Sprite library: the files go to static/sparky-assets/ (served
  * by the editor's own origin, see src/lib/sparky-assets.js) and the library entry to
  * src/lib/libraries/sparky-sprites.json (passed to the GUI as dynamicAssets, so sprites.json stays upstream's).
+ * Each costume is also listed on its own in the Choose a Costume catalogue, via src/lib/libraries/sparky-costumes.json.
  *
  * PNG and SVG are both supported. To swap the art, drop the new files into the source folder (keeping the
  * manifest's file names, or edit the manifest) and re-run:
@@ -32,6 +33,7 @@ const OUT_DIR = path.join(PACKAGE_ROOT, 'src', 'lib', 'default-project', 'firefl
 const OUT_MODULE = path.join(OUT_DIR, 'firefly-costumes.ts');
 const STATIC_DIR = path.join(PACKAGE_ROOT, 'static', 'sparky-assets');
 const OUT_LIBRARY = path.join(PACKAGE_ROOT, 'src', 'lib', 'libraries', 'sparky-sprites.json');
+const OUT_COSTUME_LIBRARY = path.join(PACKAGE_ROOT, 'src', 'lib', 'libraries', 'sparky-costumes.json');
 const LIBRARY_TAGS = ['animals', 'fantasy', 'sparky', 'firefly'];
 const DEFAULT_MANIFEST = path.join(__dirname, 'firefly-manifest.json');
 const DEFAULT_SRC = path.resolve(PACKAGE_ROOT, '../../..', 'documents', 'Sparky-scratch-redesign', 'prototype',
@@ -196,6 +198,32 @@ const renderModule = costumes => {
 };
 
 /**
+ * @param {object} c a described costume
+ * @returns {object} the costume in library form (project.json fields plus tags and a local thumbnail URL)
+ */
+const libraryCostume = c => ({
+    name: c.name,
+    assetId: c.assetId,
+    md5ext: c.md5ext,
+    dataFormat: c.ext,
+    bitmapResolution: c.bitmapResolution,
+    rotationCenterX: c.rotationCenterX,
+    rotationCenterY: c.rotationCenterY,
+    tags: LIBRARY_TAGS,
+    // library.jsx prefers rawURL for the card thumbnail, so it never asks the Scratch CDN for these files
+    rawURL: `static/sparky-assets/${c.md5ext}`
+});
+
+/**
+ * @param {object[]} costumes described costumes, in manifest order
+ * @returns {string} the costume library entries (JSON array) for the Choose a Costume catalogue, named like
+ *     upstream's "Abby-a" so they read as one character's set
+ */
+const renderCostumeLibrary = costumes => JSON.stringify(
+    // without isPublic the card shows the membership star and the catalogue grows a Membership tag
+    costumes.map(c => ({...libraryCostume(c), name: `Firefly-${c.name}`, isPublic: true})), null, 4) + '\n';
+
+/**
  * @param {object[]} costumes described costumes, in manifest order
  * @returns {string} the sprite library entry (JSON array) for the Choose a Sprite catalogue
  */
@@ -203,18 +231,7 @@ const renderLibrary = costumes => JSON.stringify([{
     name: 'Firefly',
     tags: LIBRARY_TAGS,
     isStage: false,
-    costumes: costumes.map(c => ({
-        name: c.name,
-        assetId: c.assetId,
-        md5ext: c.md5ext,
-        dataFormat: c.ext,
-        bitmapResolution: c.bitmapResolution,
-        rotationCenterX: c.rotationCenterX,
-        rotationCenterY: c.rotationCenterY,
-        tags: LIBRARY_TAGS,
-        // library.jsx prefers rawURL for the card thumbnail, so it never asks the Scratch CDN for these files
-        rawURL: `static/sparky-assets/${c.md5ext}`
-    })),
+    costumes: costumes.map(libraryCostume),
     sounds: [],
     variables: {},
     blocks: {},
@@ -256,6 +273,7 @@ const main = () => {
     }
     for (const c of costumes) fs.writeFileSync(path.join(STATIC_DIR, c.md5ext), c.bytes);
     fs.writeFileSync(OUT_LIBRARY, renderLibrary(costumes));
+    fs.writeFileSync(OUT_COSTUME_LIBRARY, renderCostumeLibrary(costumes));
 
     console.table(costumes.map(c => ({
         name: c.name,
@@ -267,7 +285,8 @@ const main = () => {
         center: `${c.rotationCenterX},${c.rotationCenterY}`
     })));
     console.log(`wrote ${keep.size} asset file(s), ${path.relative(PACKAGE_ROOT, OUT_MODULE)}, ` +
-        `${path.relative(PACKAGE_ROOT, STATIC_DIR)}/ and ${path.relative(PACKAGE_ROOT, OUT_LIBRARY)}`);
+        `${path.relative(PACKAGE_ROOT, STATIC_DIR)}/, ${path.relative(PACKAGE_ROOT, OUT_LIBRARY)} and ` +
+        `${path.relative(PACKAGE_ROOT, OUT_COSTUME_LIBRARY)}`);
 };
 
 main();
