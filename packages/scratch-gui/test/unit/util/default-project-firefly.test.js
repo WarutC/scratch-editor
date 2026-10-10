@@ -31,7 +31,7 @@ describe('Firefly default sprite', () => {
 
     test('it has the 12 costumes in order', () => {
         expect(sprite.costumes.map(costume => costume.name)).toEqual(EXPECTED_NAMES);
-        expect(sprite.currentCostume).toBe(0);
+        expect(sprite.costumes[sprite.currentCostume].name).toBe('Flight'); // the pose a new project starts in
     });
 
     test('each costume assetId is the md5 of its file', () => {

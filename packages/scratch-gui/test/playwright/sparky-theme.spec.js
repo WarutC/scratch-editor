@@ -261,6 +261,9 @@ test('a new project has the Firefly sprite with 12 costumes, drawn on the stage'
     );
     await expect(costumes).toHaveCount(12);
     await expect(costumes.first()).toContainText('Walking');
+    // a new project starts in the Flight pose
+    await expect(page.locator('[class*="asset-panel_wrapper"] [class*="sprite-selector-item_is-selected"]'))
+        .toContainText('Flight');
     for (const thumbnail of await costumes.locator('img').all()) {
         await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     }
@@ -417,7 +420,9 @@ test('Choose a Costume finds the 12 Firefly costumes and adds one, without Scrat
     );
     await expect(costumes).toHaveCount(13);
     await expect(costumes.last()).toContainText('Firefly-Love Glow Heart-on');
-    const thumbnail = costumes.last().locator('img').first(); // the costume image, before the delete badge
+    // the costume image, before the delete badge
+    const thumbnail = costumes.last().locator('img')
+        .first();
     await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     const fireflyFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'static', 'sparky-assets'));
     expect(scratchRequests.filter(url => fireflyFiles.some(file => url.includes(file)))).toEqual([]);

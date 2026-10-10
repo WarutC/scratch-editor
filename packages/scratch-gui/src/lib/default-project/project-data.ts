@@ -3,6 +3,13 @@ import sharedMessages from '../shared-messages';
 import {MessageObject, TranslatorFunction} from '../../gui-config';
 import {fireflyCostumes} from './firefly/firefly-costumes';
 
+/** A new project's Firefly starts in its Flight pose; the costume order stays the manifest's. */
+const FIREFLY_START_COSTUME = 'Flight';
+const fireflyStartIndex = fireflyCostumes.findIndex(costume => costume.name === FIREFLY_START_COSTUME);
+if (fireflyStartIndex < 0) {
+    throw new Error(`default project: Firefly has no '${FIREFLY_START_COSTUME}' costume; check firefly-manifest.json`);
+}
+
 const messages = {...projectDataMessages, ...sharedMessages};
 
 // use the default message if a translation function is not passed
@@ -60,7 +67,7 @@ const projectData = (translateFunction?: TranslatorFunction): object => {
                 lists: {},
                 broadcasts: {},
                 blocks: {},
-                currentCostume: 0,
+                currentCostume: fireflyStartIndex,
                 costumes: fireflyCostumes,
                 sounds: [
                     {
