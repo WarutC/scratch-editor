@@ -4,7 +4,7 @@ import {MessageObject, TranslatorFunction} from '../../gui-config';
 import {fireflyCostumes} from './firefly/firefly-costumes';
 
 /** A new project's Firefly starts in its Flight pose; the costume order stays the manifest's. */
-const FIREFLY_START_COSTUME = 'Flight';
+const FIREFLY_START_COSTUME = 'SPARKY_Flight';
 const fireflyStartIndex = fireflyCostumes.findIndex(costume => costume.name === FIREFLY_START_COSTUME);
 if (fireflyStartIndex < 0) {
     throw new Error(`default project: Firefly has no '${FIREFLY_START_COSTUME}' costume; check firefly-manifest.json`);

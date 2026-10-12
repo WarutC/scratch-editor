@@ -260,10 +260,10 @@ test('a new project has the Firefly sprite with 12 costumes, drawn on the stage'
         '[class*="asset-panel_wrapper"] [class*="sprite-selector-item_sprite-selector-item"]'
     );
     await expect(costumes).toHaveCount(12);
-    await expect(costumes.first()).toContainText('Walking');
+    await expect(costumes.first()).toContainText('SPARKY_Walking');
     // a new project starts in the Flight pose
     await expect(page.locator('[class*="asset-panel_wrapper"] [class*="sprite-selector-item_is-selected"]'))
-        .toContainText('Flight');
+        .toContainText('SPARKY_Flight');
     for (const thumbnail of await costumes.locator('img').all()) {
         await expect.poll(() => thumbnail.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     }
@@ -405,7 +405,7 @@ test('Choose a Costume finds the 12 Firefly costumes and adds one, without Scrat
     await page.getByPlaceholder('Search').fill('firefly');
     const cards = page.locator('[class*="library_library-scroll-grid"] > [class*="library-item_library-item"]');
     await expect(cards).toHaveCount(12);
-    await expect(cards.filter({hasText: 'Firefly-Walking'})).toHaveCount(2); // Walking and Walking-on
+    await expect(cards.filter({hasText: 'SPARKY_Walking'})).toHaveCount(2); // Walking and Walking-on
     // free to use: no membership star on the cards and no Membership filter
     await expect(cards.locator('[class*="library-item_member-asset-icon"]'))
         .toHaveCount(0);
@@ -413,13 +413,13 @@ test('Choose a Costume finds the 12 Firefly costumes and adds one, without Scrat
     for (const img of await cards.locator('img').all()) {
         await expect.poll(() => img.evaluate(el => el.complete && el.naturalWidth > 0)).toBe(true);
     }
-    await cards.filter({hasText: 'Firefly-Love Glow Heart-on'}).click();
+    await cards.filter({hasText: 'SPARKY_Love Glow Heart-on'}).click();
 
     const costumes = page.locator(
         '[class*="asset-panel_wrapper"] [class*="sprite-selector-item_sprite-selector-item"]'
     );
     await expect(costumes).toHaveCount(13);
-    await expect(costumes.last()).toContainText('Firefly-Love Glow Heart-on');
+    await expect(costumes.last()).toContainText('SPARKY_Love Glow Heart-on');
     // the costume image, before the delete badge
     const thumbnail = costumes.last().locator('img')
         .first();

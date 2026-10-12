@@ -216,12 +216,12 @@ const libraryCostume = c => ({
 
 /**
  * @param {object[]} costumes described costumes, in manifest order
- * @returns {string} the costume library entries (JSON array) for the Choose a Costume catalogue, named like
- *     upstream's "Abby-a" so they read as one character's set
+ * @returns {string} the costume library entries (JSON array) for the Choose a Costume catalogue, under the same
+ *     SPARKY_<pose> names as the sprite's costumes; the tags keep them findable by "firefly" and "sparky"
  */
 const renderCostumeLibrary = costumes => JSON.stringify(
     // without isPublic the card shows the membership star and the catalogue grows a Membership tag
-    costumes.map(c => ({...libraryCostume(c), name: `Firefly-${c.name}`, isPublic: true})), null, 4) + '\n';
+    costumes.map(c => ({...libraryCostume(c), isPublic: true})), null, 4) + '\n';
 
 /**
  * @param {object[]} costumes described costumes, in manifest order

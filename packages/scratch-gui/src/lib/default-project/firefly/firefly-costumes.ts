@@ -18,7 +18,7 @@ import costume11 from '!raw-loader!./cd5e51c2a823468dc3d5668df815dc66.svg?';
 export const fireflyCostumes = [
     {
         assetId: 'a6614f5163518f21aeed296e96c52c9d',
-        name: 'Walking',
+        name: 'SPARKY_Walking',
         bitmapResolution: 1,
         md5ext: 'a6614f5163518f21aeed296e96c52c9d.svg',
         dataFormat: 'svg',
@@ -27,7 +27,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '1207153af3c4e8f0b25867cab154578b',
-        name: 'Walking-on',
+        name: 'SPARKY_Walking-on',
         bitmapResolution: 1,
         md5ext: '1207153af3c4e8f0b25867cab154578b.svg',
         dataFormat: 'svg',
@@ -36,7 +36,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '1fafd1ab1e91b2333fcdb59cecf3be6f',
-        name: 'Flight',
+        name: 'SPARKY_Flight',
         bitmapResolution: 1,
         md5ext: '1fafd1ab1e91b2333fcdb59cecf3be6f.svg',
         dataFormat: 'svg',
@@ -45,7 +45,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: 'e5ff8f8dce7512b8123e271c5e27cb5b',
-        name: 'Flight-on',
+        name: 'SPARKY_Flight-on',
         bitmapResolution: 1,
         md5ext: 'e5ff8f8dce7512b8123e271c5e27cb5b.svg',
         dataFormat: 'svg',
@@ -54,7 +54,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '592836920c2cd6bd7e135630f3e45f3b',
-        name: 'Waving Hello',
+        name: 'SPARKY_Waving Hello',
         bitmapResolution: 1,
         md5ext: '592836920c2cd6bd7e135630f3e45f3b.svg',
         dataFormat: 'svg',
@@ -63,7 +63,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '87c1f5d3bc718224d3da5b00afbe73c9',
-        name: 'Waving Hello-on',
+        name: 'SPARKY_Waving Hello-on',
         bitmapResolution: 1,
         md5ext: '87c1f5d3bc718224d3da5b00afbe73c9.svg',
         dataFormat: 'svg',
@@ -72,7 +72,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: 'a0e3d95ab2b2904636c4a7d35b8c3873',
-        name: 'Thumbs Up',
+        name: 'SPARKY_Thumbs Up',
         bitmapResolution: 1,
         md5ext: 'a0e3d95ab2b2904636c4a7d35b8c3873.svg',
         dataFormat: 'svg',
@@ -81,7 +81,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '45caa70daeffeeeaed63bba101b9ea9c',
-        name: 'Thumbs Up-on',
+        name: 'SPARKY_Thumbs Up-on',
         bitmapResolution: 1,
         md5ext: '45caa70daeffeeeaed63bba101b9ea9c.svg',
         dataFormat: 'svg',
@@ -90,7 +90,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '4a0410a4de6a66d15b624c4ba3baaaf5',
-        name: 'Sleeping',
+        name: 'SPARKY_Sleeping',
         bitmapResolution: 1,
         md5ext: '4a0410a4de6a66d15b624c4ba3baaaf5.svg',
         dataFormat: 'svg',
@@ -99,7 +99,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '8978f61bcdbe5ad7a4c70b0dd2933292',
-        name: 'Sleeping-on',
+        name: 'SPARKY_Sleeping-on',
         bitmapResolution: 1,
         md5ext: '8978f61bcdbe5ad7a4c70b0dd2933292.svg',
         dataFormat: 'svg',
@@ -108,7 +108,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: '4bbe36811204a17d0465519d4da6cc7c',
-        name: 'Love Glow Heart',
+        name: 'SPARKY_Love Glow Heart',
         bitmapResolution: 1,
         md5ext: '4bbe36811204a17d0465519d4da6cc7c.svg',
         dataFormat: 'svg',
@@ -117,7 +117,7 @@ export const fireflyCostumes = [
     },
     {
         assetId: 'cd5e51c2a823468dc3d5668df815dc66',
-        name: 'Love Glow Heart-on',
+        name: 'SPARKY_Love Glow Heart-on',
         bitmapResolution: 1,
         md5ext: 'cd5e51c2a823468dc3d5668df815dc66.svg',
         dataFormat: 'svg',

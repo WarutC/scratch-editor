@@ -4,18 +4,21 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import defaultProjectGenerator from '../../../src/lib/default-project/index';
+import sparkyCostumes from '../../../src/lib/libraries/sparky-costumes.json';
+import sparkySprites from '../../../src/lib/libraries/sparky-sprites.json';
 
 // The loaders in the generated module (`!raw-loader!./firefly/<md5>.svg?`) resolve to a stub under jest
 // (see moduleNameMapper in package.json), so the asset bytes are checked on disk instead.
 const FIREFLY_DIR = path.join(__dirname, '../../../src/lib/default-project/firefly');
 
+// QA 16: the customer names every mascot costume SPARKY_<pose>, e.g. SPARKY_Walking
 const EXPECTED_NAMES = [
-    'Walking', 'Walking-on',
-    'Flight', 'Flight-on',
-    'Waving Hello', 'Waving Hello-on',
-    'Thumbs Up', 'Thumbs Up-on',
-    'Sleeping', 'Sleeping-on',
-    'Love Glow Heart', 'Love Glow Heart-on'
+    'SPARKY_Walking', 'SPARKY_Walking-on',
+    'SPARKY_Flight', 'SPARKY_Flight-on',
+    'SPARKY_Waving Hello', 'SPARKY_Waving Hello-on',
+    'SPARKY_Thumbs Up', 'SPARKY_Thumbs Up-on',
+    'SPARKY_Sleeping', 'SPARKY_Sleeping-on',
+    'SPARKY_Love Glow Heart', 'SPARKY_Love Glow Heart-on'
 ];
 
 describe('Firefly default sprite', () => {
@@ -31,7 +34,16 @@ describe('Firefly default sprite', () => {
 
     test('it has the 12 costumes in order', () => {
         expect(sprite.costumes.map(costume => costume.name)).toEqual(EXPECTED_NAMES);
-        expect(sprite.costumes[sprite.currentCostume].name).toBe('Flight'); // the pose a new project starts in
+        expect(sprite.costumes[sprite.currentCostume].name).toBe('SPARKY_Flight'); // the pose a new project starts in
+    });
+
+    test('the Choose a Sprite and Choose a Costume catalogues use the same SPARKY_ names', () => {
+        expect(sparkySprites[0].costumes.map(costume => costume.name)).toEqual(EXPECTED_NAMES);
+        expect(sparkyCostumes.map(costume => costume.name)).toEqual(EXPECTED_NAMES);
+        // still found by searching "firefly" or "sparky" (the search also matches tags)
+        for (const costume of sparkyCostumes) {
+            expect(costume.tags).toEqual(expect.arrayContaining(['firefly', 'sparky']));
+        }
     });
 
     test('each costume assetId is the md5 of its file', () => {
