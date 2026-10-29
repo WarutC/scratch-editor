@@ -1,0 +1,20 @@
+name: Feature (ขอฟีเจอร์)
+description: เสนอสิ่งที่ควรทำได้เพิ่ม
+labels: [enhancement]
+body:
+  - type: textarea
+    id: goal
+    attributes: {label: เป้าหมาย, description: "ผู้ใช้ทำอะไรได้เพิ่มขึ้น"}
+    validations: {required: true}
+  - type: textarea
+    id: why
+    attributes: {label: ปัญหาที่แก้ / เหตุผล}
+  - type: textarea
+    id: proposal
+    attributes: {label: ข้อเสนอ}
+  - type: textarea
+    id: done
+    attributes: {label: เกณฑ์ที่ถือว่าเสร็จ, value: "- [ ] \n- [ ] "}
+  - type: textarea
+    id: area
+    attributes: {label: ส่วนที่เกี่ยวข้อง, description: "scratch-editor / middleware / firmware และ issue ที่เกี่ยวข้อง"}

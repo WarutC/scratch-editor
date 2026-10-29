@@ -1,0 +1,31 @@
+name: Bug (แจ้งข้อผิดพลาด)
+description: แจ้งสิ่งที่ทำงานไม่ตรงที่คาดหวัง
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes: {label: สรุป, description: "1 ประโยค: อะไรพัง ที่ไหน"}
+    validations: {required: true}
+  - type: textarea
+    id: impact
+    attributes: {label: ผลกระทบ, description: "ใครได้รับผล / บ่อยแค่ไหน / มีวิธีเลี่ยงไหม"}
+  - type: textarea
+    id: steps
+    attributes: {label: ขั้นตอนทำซ้ำ, value: "1. \n2. \n3. "}
+    validations: {required: true}
+  - type: textarea
+    id: expected
+    attributes: {label: ผลที่คาดหวัง}
+    validations: {required: true}
+  - type: textarea
+    id: actual
+    attributes: {label: ผลที่เกิดจริง}
+    validations: {required: true}
+  - type: textarea
+    id: env
+    attributes:
+      label: สภาพแวดล้อม
+      value: "- ส่วนที่เกี่ยวข้อง: scratch-editor (เว็บ) / middleware / firmware\n- เวอร์ชัน / URL: \n- ระบบปฏิบัติการและเบราว์เซอร์: \n- บอร์ด (ถ้ามี): รหัสบอร์ดและวิธีต่อ USB/BLE"
+  - type: textarea
+    id: evidence
+    attributes: {label: หลักฐาน, description: "ภาพหน้าจอ / วิดีโอ / log"}
