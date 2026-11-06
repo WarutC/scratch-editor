@@ -231,7 +231,7 @@ test('Sparky command blocks show no [object Object] bubble or tooltip', async ({
     expect(pageErrors).toEqual([]);
 });
 
-// A new project starts with the Firefly mascot (12 bundled SVG costumes) instead of Scratch Cat.
+// A new project starts with the Firefly mascot (12 bundled PNG costumes) instead of Scratch Cat.
 test('a new project has the Firefly sprite with 12 costumes, drawn on the stage', async ({page}) => {
     const failed = [];
     // env-config.js is an optional deployment file that the file:// build never has; unrelated to the sprite.
