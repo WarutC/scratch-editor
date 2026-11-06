@@ -1,14 +1,14 @@
 [
-    {"name": "SPARKY_Walking", "file": "Sparky_walk_01.svg"},
-    {"name": "SPARKY_Walking-on", "file": "Sparky_walk_02.svg"},
-    {"name": "SPARKY_Flight", "file": "Sparky_fly_01.svg"},
-    {"name": "SPARKY_Flight-on", "file": "Sparky_fly_02.svg"},
-    {"name": "SPARKY_Waving Hello", "file": "Sparky_waving_hello_01.svg"},
-    {"name": "SPARKY_Waving Hello-on", "file": "Sparky_waving_hello_02.svg"},
-    {"name": "SPARKY_Thumbs Up", "file": "Sparky_thumbs_up_01.svg"},
-    {"name": "SPARKY_Thumbs Up-on", "file": "Sparky_thumbs_up_02.svg"},
-    {"name": "SPARKY_Sleeping", "file": "Sparky_sleeping_01.svg"},
-    {"name": "SPARKY_Sleeping-on", "file": "Sparky_sleeping_02.svg"},
-    {"name": "SPARKY_Love Glow Heart", "file": "Sparky_love_01.svg"},
-    {"name": "SPARKY_Love Glow Heart-on", "file": "Sparky_love_02.svg"}
+    {"name": "SPARKY_Walking", "file": "SPARKY_Walking.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Walking-on", "file": "SPARKY_Walking-on.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Flight", "file": "SPARKY_Flight.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Flight-on", "file": "SPARKY_Flight-on.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Waving Hello", "file": "SPARKY_Waving Hello.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Waving Hello-on", "file": "SPARKY_Waving Hello-on.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Thumbs Up", "file": "SPARKY_Thumbs Up.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Thumbs Up-on", "file": "SPARKY_Thumbs Up-on.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Sleeping", "file": "SPARKY_Sleeping.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Sleeping-on", "file": "SPARKY_Sleeping-on.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Love Glow Heart", "file": "SPARKY_Love Glow Heart.png", "bitmapResolution": 2},
+    {"name": "SPARKY_Love Glow Heart-on", "file": "SPARKY_Love Glow Heart-on.png", "bitmapResolution": 2}
 ]
